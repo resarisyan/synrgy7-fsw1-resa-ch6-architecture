@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-100 font-sans leading-normal tracking-normal">
+    <!-- Navbar -->
+    <nav class="bg-gray-800 p-4">
+      <div class="container mx-auto flex justify-between items-center">
+        <a href="#" class="text-white text-2xl font-bold">MyApp</a>
+        <div>
+          <a href="#" class="text-gray-300 hover:text-white mx-2">Profile</a>
+          <a href="#" class="text-gray-300 hover:text-white mx-2">Settings</a>
+          <a href="#" class="text-gray-300 hover:text-white mx-2">Logout</a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mx-auto mt-8">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- Sidebar -->
+        <div class="bg-white p-4 rounded shadow-md md:col-span-1">
+          <h2 class="text-2xl font-bold mb-4">Navigation</h2>
+          <ul>
+            <li class="mb-2">
+              <a href="#" class="text-blue-500 hover:underline">Dashboard</a>
+            </li>
+            <li class="mb-2">
+              <a href="#" class="text-blue-500 hover:underline">Messages</a>
+            </li>
+            <li class="mb-2">
+              <a href="#" class="text-blue-500 hover:underline">Settings</a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Content -->
+        <div class="bg-white p-6 rounded shadow-md md:col-span-2">
+          <h1 class="text-3xl font-bold mb-4">Welcome to the Dashboard</h1>
+          <p class="text-gray-700">
+            This is your dashboard where you can view your activities and manage
+            your account.
+          </p>
+          <div class="mt-6">
+            <h2 class="text-2xl font-bold mb-4">Recent Activities</h2>
+            <div class="bg-gray-50 p-4 rounded shadow-md mb-4">
+              <p class="text-gray-800">You logged in from a new device.</p>
+              <span class="text-gray-600 text-sm">5 minutes ago</span>
+            </div>
+            <div class="bg-gray-50 p-4 rounded shadow-md mb-4">
+              <p class="text-gray-800">You updated your profile picture.</p>
+              <span class="text-gray-600 text-sm">2 hours ago</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
