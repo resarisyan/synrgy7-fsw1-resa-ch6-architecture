@@ -1,3 +1,4 @@
+import { UserRepository } from './../repositories/user-repository';
 import bcrypt from 'bcrypt';
 import { Validation } from '../validations';
 import { UserValidation } from '../validations/user-validation';
@@ -8,9 +9,9 @@ import {
 import { UserResponse } from '../dto/response/user-response';
 import { UserModel } from '../models/user-model';
 import { ResponseError } from '../handlers/response-error';
-import { TokenModel } from '../models/token-model';
 import jwt from 'jsonwebtoken';
 import { EnumRoleUser } from '../enums/role-user-enum';
+import { TokenRepository } from '../repositories/token-repository';
 
 export class UserService {
   public static async login(req: LoginUserRequest): Promise<UserResponse> {
@@ -32,7 +33,7 @@ export class UserService {
       { expiresIn: '1d' }
     );
 
-    const dataToken = await TokenModel.query().insert({
+    const dataToken = await TokenRepository.insert({
       token: jwtToken,
       user_id: user.id,
       expires_at: new Date(Date.now() + 86400000),
@@ -50,22 +51,18 @@ export class UserService {
     req: RegisterUserRequest
   ): Promise<UserResponse> {
     const registerRequest = Validation.validate(UserValidation.REGISTER, req);
-    const user = await UserModel.query().findOne(
-      'username',
-      registerRequest.username
-    );
+    const user = await UserRepository.findByUsername(registerRequest.username);
     if (user) {
       throw new ResponseError(400, 'Username already exists');
     }
 
     const hashedPassword = await bcrypt.hash(registerRequest.password, 10);
-    const dataUser = await UserModel.query().insert({
+    const dataUser = await UserRepository.insert({
       username: registerRequest.username,
       password: hashedPassword,
       name: registerRequest.name,
-      role: registerRequest.role || EnumRoleUser.CUSTOMER,
+      role: EnumRoleUser.CUSTOMER,
     });
-
     return {
       username: dataUser.username,
       name: dataUser.name,
@@ -77,14 +74,13 @@ export class UserService {
     req: RegisterUserRequest
   ): Promise<UserResponse> {
     const registerRequest = Validation.validate(UserValidation.REGISTER, req);
-    const user = await UserModel.query().findById(id);
+    const user = await UserRepository.findById(id);
     if (!user) {
       throw new ResponseError(404, 'User not found');
     }
 
     if (registerRequest.username) {
-      const user = await UserModel.query().findOne(
-        'username',
+      const user = await UserRepository.findByUsername(
         registerRequest.username
       );
       if (user) {
@@ -112,8 +108,6 @@ export class UserService {
   }
 
   public static async logout(token: string): Promise<void> {
-    await TokenModel.query().findOne('token', token).patch({
-      is_revoked: true,
-    });
+    await TokenRepository.deleteByToken(token);
   }
 }
